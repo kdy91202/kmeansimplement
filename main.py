@@ -24,33 +24,70 @@ data7 = []
 data8 = []
 data9 = []
 data10 = []
+coldata1 = []
+coldata2 = []
+coldata3 = []
+coldata4 = []
+coldata5 = []
+coldata6 = []
+coldata7 = []
+coldata8 = []
+coldata9 = []
+coldata10 = []
+coldata11 = []
+coldata12 = []
+
 num = -1
 
 with open('assignment2_input.txt', 'r') as file:
     for line in file:
-        data = line.strip().split('\t')
-        data = line.strip().split('\n')
-
-        if num < 49:
-            print(num, line)
-        if num >= 49 and num < 98:
-            data2.append(line)
-            print(num, data2)
-
         num = num + 1
-"""     if line > '99' and line <= '149':
-            data3.append(float(data3[data]))
-        if line > '149' and line <= '199':
-            data4.append(float(data4[data]))
-        if line > '199' and line <= '249':
-            data5.append(float(data5[data]))
-        if line > '249' and line <= '299':
-            data6.append(float(data6[data]))
-        if line > '299' and line <= '349':
-            data7.append(float(data7[data]))
-        if line > '349' and line <= '399':
-            data8.append(float(data8[data]))
-        if line > '399' and line <= '449':
-            data9.append(float(data9[data]))
-        if line > '449' and line <= '499':
-            data10.append(float(data10[data])) """
+        if num <= 49:
+            data1.append(line.strip().split('\t'))
+        if num >= 50 and num <= 99:
+            data2.append(line.strip().split('\t'))
+        if num >= 100 and num <= 149:
+            data3.append(line.strip().split('\t'))
+        if num >= 150 and num <= 199:
+            data4.append(line.strip().split('\t'))
+        if num >= 200 and num <= 249:
+            data5.append(line.strip().split('\t'))
+        if num >= 250 and num <= 299:
+            data6.append(line.strip().split('\t'))
+        if num >= 300 and num <= 349:
+            data7.append(line.strip().split('\t'))
+        if num >= 350 and num <= 399:
+            data8.append(line.strip().split('\t'))
+        if num >= 400 and num <= 449:
+            data9.append(line.strip().split('\t'))
+        if num >= 450 and num <= 500:
+            data10.append(line.strip().split('\t'))
+
+
+cols = np.array(data1).T[0]
+coldata1 = cols.tolist()
+cols = np.array(data1).T[1]
+coldata2 = cols.tolist()
+cols = np.array(data1).T[2]
+coldata3 = cols.tolist()
+cols = np.array(data1).T[3]
+coldata4 = cols.tolist()
+cols = np.array(data1).T[4]
+coldata5 = cols.tolist()
+cols = np.array(data1).T[5]
+coldata6 = cols.tolist()
+cols = np.array(data1).T[6]
+coldata7 = cols.tolist()
+cols = np.array(data1).T[7]
+coldata8 = cols.tolist()
+cols = np.array(data1).T[8]
+coldata9 = cols.tolist()
+cols = np.array(data1).T[9]
+coldata10 = cols.tolist()
+cols = np.array(data1).T[10]
+coldata11 = cols.tolist()
+cols = np.array(data1).T[11]
+coldata12 = cols.tolist()
+
+for i in range(50) :
+    print(i, coldata2[i])
