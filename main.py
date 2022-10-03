@@ -1,10 +1,13 @@
 # created by 김대엽 2020253113
-import csv
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sb
 import sys
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_blobs
+import random
+
 
 """def main(args):
     with open(args, 'r') as file:
@@ -101,48 +104,76 @@ for i in range(12) :
 
 plt.show()'''
 
+'''
+coldatac1 = StandardScaler().fit_transform(coldatac1)
+
+for i in range(12) :
+    sb.scatterplot(x=[X[i] for X in coldatac1],
+                 y=[X[i+1] for X in coldatac1],
+                 legend=None)
+
+plt.xlabel("x")
+plt.ylabel("y")
+plt.show()
+'''
+
+
 def euclidist(x, y) :
-    return round(np.sqrt(np.sum(x - y)**2), 4)
+    return np.round(np.sqrt(np.sum((x - y)**2, axis=1)), 3)
 
-def gcenter(x) :
-    x = np.array(x)
-    return x.mean(axis=0)
+class KMeans :
 
-def cluster(x, k=10, iteration=10) :
-    log = []
-    centers = x[np.random.choice(len(x), size=k, replace=False)]
-    num = -1
-    for it in range(iteration):
-        group = {}
-        for i in range(k):
-            group[i] = []
-        for j in x:
-            tmp = []
-            for i in range(k):
-                tmp.append(euclidist(centers[i], j))
-            group[np.argmin(tmp)].append(j.tolist())
+    def __init__(self, clusters=10, max_iter=50):
+        self.clusters = clusters
+        self.max_iter = max_iter
 
-        for i in range(k) :
-            group_tmp = np.array(group[i])
-            group_tmp = np.c_[group_tmp, np.full(len(group_tmp), i)]
-            if i == 0  :
-                grouped = group_tmp
-            else :
-                grouped = np.append(grouped, group_tmp, axis=0)
+    def fit(self, xtrain):
+        mins, maxs = np.min(xtrain, axis=0), np.max(xtrain, axis=0)
+        self.centroids = [random.uniform(mins, maxs) for _ in range(self.clusters)]
 
-        centers_new = []
-        for i in range(k):
-            centers_new.append(gcenter(group[i]).tolist())
-        centers_new = np.array(centers_new)
-        if np.sum(centers - centers_new) == 0:
-            break
-        else :
-            centers = centers_new
-            log.append(grouped)
-        num = num + 1
-    return grouped, log, it
+        iters = 0
+        prev_centroids = None
 
-grouped, logs, it = cluster(coldatac1[1])
+        while np.not_equal(self.centroids, prev_centroids).any() and iters < self.max_iter :
+            sorted_pts = [[] for _ in range(self.clusters)]
+            for x in xtrain :
+                dist = euclidist(x, self.centroids)
+                centroid_idx = np.argmin(dist)
+                sorted_pts[centroid_idx].append(x)
 
-print(f'iter num:{it}', f'target : {grouped[43]}', f'id : {logs[2]}')
+                prev_centroids = self.centroids
+                self.centroids = [np.mean(cluster, axis=0) for cluster in sorted_pts]
+
+                for i, centroid in enumerate(self.centroids) :
+                    if np.isnan(centroid).any() :
+                        self.centroids[i] = prev_centroids[i]
+                    iters += 1
+
+    def evaluate(self, X):
+        centeroids = []
+        centeroids_idx = []
+        for x in X :
+            dists = euclidist(x, self.centroids)
+            centeroids_idx = np.argmin(dists)
+            centeroids.append(self.centeroids_idx)
+
+        return centeroids, centeroids_idx
+
+
+kmeans = KMeans(clusters=10)
+kmeans.fit(coldatac1)
+
+class_centers, classification = kmeans.evaluate(coldatac1)
+
+for i in range(12):
+    sb.scatterplot(x=[X[i] for X in coldatac1],
+                   y=[X[i + 1] for X in coldatac1],
+                   style=classification,
+                   legend=None)
+    plt.plot([x for x, _ in kmeans.centroids],
+             [y for _, y in kmeans.centroids],
+             '+',
+             markersize=10,
+             )
+plt.show()
 
